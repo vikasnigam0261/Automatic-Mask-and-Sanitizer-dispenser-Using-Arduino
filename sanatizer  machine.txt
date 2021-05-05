@@ -1,0 +1,144 @@
+#define echoPin 2
+#define trigPin 3
+
+long duration;
+int distance;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(5, OUTPUT);
+  Serial.begin(9600);
+}
+void loop() {
+ 
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+
+  distance = duration * 0.034 / 2;
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+  if (distance<=3)
+  {
+    digitalWrite(5, HIGH);
+    Serial.print("Pump On");
+    delay(150);
+    digitalWrite(5, LOW);
+    Serial.print("Pump OFF");
+    delay(2000);
+  }
+  else
+  {
+    digitalWrite(5, LOW);
+    Serial.print("Pump OFF");
+  
+  }
+  delay(50);
+}
+ 
+ with mask 
+int IRSensorS = 12; // connect ir sensor for sani to arduino 12
+
+int IRSensorM = 8; // connect ir sensor  for mask to arduino pin 8
+
+int fla = A2; // Motor Driver 2 Pins IN1
+
+int flb = A3; // Motor Driver 2 Pins IN2
+
+int san = 5; // Motor Driver 2 Pins IN3
+
+int san1 = 6; // Motor Driver 2 Pins IN4
+
+int pwm = 9;
+
+
+
+void setup() {
+
+  Serial.begin(9600);
+
+  pinMode(pwm, OUTPUT);
+
+  pinMode(IRSensorM, INPUT);
+
+  pinMode(fla, OUTPUT);  // Digital pin A2 set as output Pin
+
+  pinMode(flb, OUTPUT);  // Digital pin A3 set as output Pin
+
+    pinMode(IRSensorS, INPUT);
+
+  pinMode(san, OUTPUT);  // Digital pin 10 set as output Pin
+
+  pinMode(san1, OUTPUT);  // Digital pin 10 set as output Pin
+
+  }
+
+
+
+void loop() {
+
+    while(1){
+
+      delay(100);
+
+      while(digitalRead ((IRSensorS) == HIGH)&&(IRSensorM) == HIGH);
+
+      if (digitalRead (IRSensorS) == LOW) {
+
+             Serial.println(120);
+
+            digitalWrite( san1, HIGH);
+
+        delay(200);//480
+
+         digitalWrite( san1, LOW);
+
+      while(digitalRead (IRSensorS) == LOW);
+
+      }else if(digitalRead (IRSensorS) == HIGH){
+
+
+
+      digitalWrite( san1, LOW);
+
+      }
+
+      if (digitalRead (IRSensorM) == LOW) {
+
+        Serial.println(120);
+
+        analogWrite(pwm, 140);
+
+        delay(10);
+
+        digitalWrite( fla, HIGH);
+
+        digitalWrite( flb, LOW);
+
+        delay(400);//480
+
+      digitalWrite( fla, LOW);
+
+      digitalWrite( flb, LOW);
+
+      analogWrite(pwm, 255);
+
+      while(digitalRead (IRSensorM) == LOW);
+
+      delay(2000);
+
+      }else if(digitalRead (IRSensorM) == HIGH){
+
+        digitalWrite( fla, LOW);
+
+      digitalWrite( flb, LOW);
+
+      }
+
+    }         
+}
